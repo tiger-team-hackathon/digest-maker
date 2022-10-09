@@ -7,6 +7,7 @@
 После активации окружения и установки библиотек:
 
 ```
+python -m nltk.downloader stopwords
 python -m run_api
 ```
 
