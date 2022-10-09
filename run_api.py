@@ -15,10 +15,10 @@ def load_roles():
 
     for file_name in os.listdir('roles'):
         role_name = file_name.split('.')[0]
-        with open(file_name, 'rb') as handle:
-            app.state.roles['role_name'] = pickle.load(handle)
+        with open(os.path.join('roles', file_name), 'rb') as handle:
+            roles[role_name] = pickle.load(handle)
 
-    return
+    return roles
 
 
 def create_app():
@@ -33,7 +33,7 @@ def create_app():
         allow_headers=["*"],
     )
 
-    app.state.matcher = Matcher(init_roles(app))
+    app.state.matcher = Matcher(load_roles())
     app.include_router(news_router)
 
     return app

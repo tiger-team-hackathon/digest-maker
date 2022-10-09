@@ -34,51 +34,57 @@ class Matcher:
         role_emb = reduce(lambda a, b: a + b, role_embs)
 
         news = self.load_news()
-        tokenized_news = self.tokenize_news(news)
 
+        return news
+
+        tokenized_news = self.tokenize_news(news)
         mean_embs = []
 
-        for new in consult_news_list_tokenized:
+        for new in tokenized_news:
             token_embs = []
 
             for token in new:
-                if token in navec:
-                    token_embs.append(navec[token])
+                if token in self.navec:
+                    token_embs.append(self.navec[token])
 
             mean_embs.append(reduce(lambda a, b: a + b, token_embs) / len(token_embs))
 
-        news_embs_df =  pd.DataFrame(mean_embs)
-        # TODO
+        score = []
+        news_embs_df = pd.DataFrame({'emb': mean_embs})
+        for _, emb in news_embs_df.items():
+            score.append(np.dot(emb.to_numpy()[0], role_emb))
+
+        news_embs_df['score'] = score
+        news_embs_df.sort_values(by='score', ascending=False)
 
     def get_score(self, role_emb, emb):
-        # TODO
-        pass
+        return np.dot(role_emb, emb)
 
     def load_news(self):
         news_path = os.path.join('news', 'cbr-400.json')
         news_df = pd.read_json(news_path)
 
-        return news_df[['content', 'date']]
+        return news_df.content.to_list()[:3]
 
     def tokenize_news(self, news):
         news_tokenized = []
 
         for text in news:
             doc = Doc(text)
-            doc.segment(segmenter)
+            doc.segment(self.segmenter)
 
             tokens_list = []
 
             for token in doc.tokens:
-                t = normalize_span(token.text.lower())
-                if t not in stopwords:
+                t = self.normalize_span(token.text.lower())
+                if t not in self.stopwords:
                     tokens_list.append(t)
 
             news_tokenized.append(tokens_list)
 
         return news_tokenized
 
-    def normalize_span(span):
+    def normalize_span(self, span):
         entry = span.strip()
 
         doc = Doc(entry)
