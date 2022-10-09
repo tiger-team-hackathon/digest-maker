@@ -12,7 +12,6 @@ def get_pred_for(targetNode):
     nodes = []
     tags = set()
 
-
     G = nx.Graph()
 
     for i in data:

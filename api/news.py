@@ -5,9 +5,9 @@ news_router = r = APIRouter()
 
 
 @r.get("/get_news_for_role/", status_code=200, response_model=dict)
-def get_news_for_role(request: Request, role: str) -> dict:
+def get_news_for_role(request: Request, role: str, page: int) -> dict:
     if role == 'accountant':
-        digest = request.app.state.matcher.get_digest_for_role(role)
+        digest = request.app.state.matcher.get_digest_for_role(role, page)
 
         res = {'news': digest}
 

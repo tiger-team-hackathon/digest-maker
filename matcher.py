@@ -29,11 +29,11 @@ class Matcher:
 
         self.role_embs = role_embs
 
-    def get_digest_for_role(self, role):
+    def get_digest_for_role(self, role, page):
         role_embs = self.role_embs[role]
         role_emb = reduce(lambda a, b: a + b, role_embs)
 
-        news = self.load_news()
+        news = self.load_news(page)
 
         return news
 
@@ -60,11 +60,11 @@ class Matcher:
     def get_score(self, role_emb, emb):
         return np.dot(role_emb, emb)
 
-    def load_news(self):
+    def load_news(self, page):
         news_path = os.path.join('news', 'cbr-400.json')
         news_df = pd.read_json(news_path)
 
-        return news_df.content.to_list()[:3]
+        return news_df.content.to_list()[3*page:3*page+3]
 
     def tokenize_news(self, news):
         news_tokenized = []
