@@ -14,3 +14,7 @@ python -m run_api
 ## Просмотр дайджеста
 
 http://0.0.0.0:8000/get_news_for_role/?role=accountant&page=0
+
+## Агрегатор данных
+
+https://github.com/tiger-team-hackathon/data-aggregator
