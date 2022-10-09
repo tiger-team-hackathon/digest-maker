@@ -12,4 +12,4 @@ python -m run_api
 
 ## Просмотр дайджеста
 
-http://0.0.0.0:8000/get_news_for_role/?role=accountant
+http://0.0.0.0:8000/get_news_for_role/?role=accountant&page=0
